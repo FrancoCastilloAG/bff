@@ -9,4 +9,4 @@ import { LoginModule } from './login/login.module';
   providers: [],
 })
 export class AppModule {}
-//esto es una prueba de jenkins
+//esto es una prueba de jenkins para deploy en kubernetes
