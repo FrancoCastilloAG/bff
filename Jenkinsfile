@@ -1,30 +1,41 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKER_IMAGE = "myrepo/bff:${env.BUILD_NUMBER}"
+    }
     stages {
-        stage('Checkout') {
+        stage('Test') {
             steps {
-                // Checkout del repositorio Git
-                checkout scm
+                sh 'npm install'
+                sh 'npm test'
             }
         }
         stage('Build') {
             steps {
-                // Construcción de la aplicación
-                sh 'npm install'
-                sh 'npm run build'
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
-        stage('Test') {
+        stage('Push') {
             steps {
-                // Ejecución de pruebas
-                sh 'npm test'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    sh "docker push ${DOCKER_IMAGE}"
+                }
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Testing') {
             steps {
-                // Despliegue de la aplicación
-                sh 'npm run start:prod &'
+                sh "kubectl apply -f ../k8s/templates/bff/deployment-testing.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/service-testing.yaml"
+            }
+        }
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh "kubectl apply -f ../k8s/templates/bff/deployment-production.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/service-production.yaml"
             }
         }
     }
