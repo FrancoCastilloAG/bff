@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = "myrepo/bff:${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "bff-service:${env.BUILD_NUMBER}"
     }
     stages {
         stage('Test') {
