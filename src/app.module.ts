@@ -9,4 +9,4 @@ import { LoginModule } from './login/login.module';
   providers: [],
 })
 export class AppModule {}
-//esto es una prueba de jenkins con deployment ahora instalado docker
+//esto es una prueba de jenkins con deployment con todo instalado
