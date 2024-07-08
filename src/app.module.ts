@@ -9,4 +9,4 @@ import { LoginModule } from './login/login.module';
   providers: [],
 })
 export class AppModule {}
-//esto es una prueba de jenkins con deployment sin imagen docker
+//esto es una prueba de jenkins con deployment con permisos a jenkins
