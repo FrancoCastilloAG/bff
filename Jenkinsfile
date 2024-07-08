@@ -20,6 +20,9 @@ pipeline {
         }
         
         stage('Deploy to Testing') {
+            when {
+                branch 'testing'
+            }
             steps {
                 script {
                     dir("${WORKSPACE}/k8s/bff") {
