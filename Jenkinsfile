@@ -17,8 +17,8 @@ pipeline {
         }
         stage('Deploy to Testing') {
             steps {
-                sh "kubectl apply -f k8s/templates/bff/deployment-testing.yaml"
-                sh "kubectl apply -f k8s/templates/bff/service-testing.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/deployment-testing.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/service-testing.yaml"
             }
         }
         stage('Deploy to Production') {
@@ -26,16 +26,16 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "kubectl apply -f k8s/templates/bff/deployment-production.yaml"
-                sh "kubectl apply -f k8s/templates/bff/service-production.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/deployment-production.yaml"
+                sh "kubectl apply -f ../k8s/templates/bff/service-production.yaml"
             }
         }
         stage('Update Services') {
             steps {
                 // Update services in Kubernetes
-                sh "kubectl apply -f k8s/templates/frontend/service.yaml -n testing"
-                sh "kubectl apply -f k8s/templates/usermanagement/service.yaml -n testing"
-                sh "kubectl apply -f k8s/templates/db-ceals/service.yaml -n default"
+                sh "kubectl apply -f ../k8s/templates/frontend/service.yaml -n testing"
+                sh "kubectl apply -f ../k8s/templates/usermanagement/service.yaml -n testing"
+                sh "kubectl apply -f ../k8s/templates/db-ceals/service.yaml -n default"
             }
         }
     }
