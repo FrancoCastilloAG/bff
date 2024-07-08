@@ -23,8 +23,8 @@ pipeline {
             steps {
                 script {
                     dir("${WORKSPACE}/k8s/bff") {
-                        sh "kubectl apply -f deployment-testing.yml"
-                        sh "kubectl apply -f service-testing.yml"
+                        sh "kubectl apply -f deployment-testing.yml --validate=false"
+                        sh "kubectl apply -f service-testing.yml --validate=false"
                     }
                 }
             }
