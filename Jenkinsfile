@@ -26,16 +26,15 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "kubectl apply -f ../k8s/templates/bff/deployment-production.yaml"
-                sh "kubectl apply -f ../k8s/templates/bff/service-production.yaml"
+                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment-production.yaml"
+                sh "kubectl apply -f ../k8s/taller/templates/bff/service-production.yaml"
             }
         }
-        stage('Update Services') {
+        stage('Update BFF Service') {
             steps {
-                // Update services in Kubernetes
-                sh "kubectl apply -f ../k8s/templates/frontend/service.yaml -n testing"
-                sh "kubectl apply -f ../k8s/templates/usermanagement/service.yaml -n testing"
-                sh "kubectl apply -f ../k8s/templates/db-ceals/service.yaml -n default"
+                // Update BFF service in Kubernetes
+                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment.yaml -n testing"
+                sh "kubectl apply -f ../k8s/taller/templates/bff/service.yaml -n testing"
             }
         }
     }
