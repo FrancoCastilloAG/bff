@@ -1,8 +1,10 @@
 pipeline {
     agent any
+    
     environment {
         DOCKER_IMAGE = "bff-service:${env.BUILD_NUMBER}"
     }
+    
     stages {
         stage('Test') {
             steps {
@@ -10,31 +12,35 @@ pipeline {
                 sh 'npm test'
             }
         }
+        
         stage('Build') {
             steps {
                 sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
+        
         stage('Deploy to Testing') {
             steps {
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment-testing.yml"
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service-testing.yml"
+                script {
+                    dir("${WORKSPACE}/k8s/bff") {
+                        sh "kubectl apply -f deployment-testing.yml"
+                        sh "kubectl apply -f service-testing.yml"
+                    }
+                }
             }
         }
+        
         stage('Deploy to Production') {
             when {
                 branch 'main'
             }
             steps {
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment-production.yaml"
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service-production.yaml"
-            }
-        }
-        stage('Update BFF Service') {
-            steps {
-                // Update BFF service in Kubernetes
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment.yaml -n testing"
-                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service.yaml -n testing"
+                script {
+                    dir("${WORKSPACE}/k8s/bff") {
+                        sh "kubectl apply -f deployment-production.yaml"
+                        sh "kubectl apply -f service-production.yaml"
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bff
+  name: bff
+  namespace: testing 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bff
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bff
+    spec:
+      containers:
+      - image: bff-service
+        name: bff-service
+        imagePullPolicy: Never
+        command: ["npm"]
+        args: ["run", "start:dev"]
+        resources: {}
+status: {}
