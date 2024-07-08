@@ -17,8 +17,8 @@ pipeline {
         }
         stage('Deploy to Testing') {
             steps {
-                sh "kubectl apply -f ../k8s/templates/bff/deployment-testing.yaml"
-                sh "kubectl apply -f ../k8s/templates/bff/service-testing.yaml"
+                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment-testing.yml"
+                sh "kubectl apply -f ../k8s/taller/templates/bff/service-testing.yml"
             }
         }
         stage('Deploy to Production') {
