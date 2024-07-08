@@ -17,8 +17,8 @@ pipeline {
         }
         stage('Deploy to Testing') {
             steps {
-                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment-testing.yml"
-                sh "kubectl apply -f ../k8s/taller/templates/bff/service-testing.yml"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment-testing.yml"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service-testing.yml"
             }
         }
         stage('Deploy to Production') {
@@ -26,15 +26,15 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment-production.yaml"
-                sh "kubectl apply -f ../k8s/taller/templates/bff/service-production.yaml"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment-production.yaml"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service-production.yaml"
             }
         }
         stage('Update BFF Service') {
             steps {
                 // Update BFF service in Kubernetes
-                sh "kubectl apply -f ../k8s/taller/templates/bff/deployment.yaml -n testing"
-                sh "kubectl apply -f ../k8s/taller/templates/bff/service.yaml -n testing"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/deployment.yaml -n testing"
+                sh "kubectl apply -f C:/Users/franco/Desktop/devops/k8s/taller/templates/bff/service.yaml -n testing"
             }
         }
     }
