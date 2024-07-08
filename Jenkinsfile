@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_IMAGE = "bff-service:${env.BUILD_NUMBER}"
-    }
     stages {
         stage('Test') {
             steps {
@@ -12,15 +9,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
-            }
-        }
-        stage('Push') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                    sh "docker push ${DOCKER_IMAGE}"
-                }
+                sh 'docker build -t bff-service:${env.BUILD_NUMBER} .'
             }
         }
         stage('Deploy to Testing') {
